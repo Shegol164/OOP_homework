@@ -1,7 +1,8 @@
 import json
 from typing import List
-from src.product import Product
+
 from src.category import Category
+from src.product import Product
 
 
 def load_data_from_json(filepath: str) -> List[Category]:
@@ -33,7 +34,10 @@ def load_data_from_json(filepath: str) -> List[Category]:
 
     return categories
 
+
 if __name__ == "__main__":
-    categories = load_data_from_json(r"C:\Users\Pavel\PycharmProjects\oop_homework\data\products.json")
+    categories = load_data_from_json(
+        r"C:\Users\Pavel\PycharmProjects\oop_homework\data\products.json"
+    )
     for category in categories:
         print(f"Категория: {category.name}, Товаров: {len(category.products)}")
