@@ -188,6 +188,17 @@ files = [
 markers = {dev = "sys_platform == \"win32\"", lint = "platform_system == \"Windows\""}
 
 [[package]]
+name = "filepath"
+version = "0.1"
+description = "Object-oriented filesystem path representation."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "filepath-0.1.tar.gz", hash = "sha256:8b0dfed6b118df089e8e513e193244fed3e4791e9d073838a5facba5f34c8e97"},
+]
+
+[[package]]
 name = "flake8"
 version = "7.1.2"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -481,4 +492,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "2999e4b37d0d9da343beaea885052c89a337ba8e78061d15a5f598259f825a16"
+content-hash = "54ab77cb99fac93f0472e187f2a7261534e12d1ae8f4e3b3acfebeb3394b8392"
