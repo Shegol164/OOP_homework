@@ -6,10 +6,10 @@ class Category:
     product_count = 0
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        products: list,
+            self,
+            name: str,
+            description: str,
+            products: list,
     ):
         """
         Инициализация категории.
@@ -19,7 +19,35 @@ class Category:
         """
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products  # Приватный атрибут списка товаров
         # Обновление атрибутов класса
         Category.category_count += 1
         Category.product_count += len(products)
+
+    def __init__(self, name: str, description: str, products: list):
+        self.name = name
+        self.description = description
+        self.__products = products  # Приватный атрибут списка товаров
+        Category.category_count += 1
+        Category.product_count += len(products)
+
+    def add_product(self, product):
+        """Добавляет товар в категорию."""
+        self.__products.append(product)
+        Category.product_count += 1
+
+    @property
+    def products(self):
+        """Геттер для списка товаров. Возвращает строку с информацией о товарах."""
+        return "\n".join(
+            [
+                f"{p.name}, {p.price} руб. Остаток: {p.quantity} шт."
+                for p in self.__products
+            ]
+        )
+
+    def __len__(self):
+        return len(self.__products)
+
+    def __repr__(self):
+        return f"Category(name={self.name}, products={self.__products})"
