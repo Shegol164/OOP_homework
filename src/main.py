@@ -12,11 +12,9 @@ def main() -> None:
     for category in categories:
         print(f"Категория: {category.name}")
         print(f"Описание: {category.description}")
-        print(f"Количество товаров: {len(category.products)}")
-        for product in category.products:
-            print(
-                f"  Товар: {product.name}, Цена: {product.price}, Количество: {product.quantity}"
-            )
+        print(f"Количество товаров: {len(category)}")
+        print("Товары:")
+        print(category.products)
         print()
 
     # Вывод общей статистики
