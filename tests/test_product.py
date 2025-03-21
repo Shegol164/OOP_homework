@@ -44,3 +44,21 @@ def test_new_product():
     p = Product.new_product(data)
     assert p.name == "Телевизоры"
     assert p.price == 123000.0
+
+
+@pytest.fixture
+def sample_product():
+    return Product(name="Смартфон",
+                   description="Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                   price=180000.0, quantity=5)
+
+
+def test_product_str(sample_product):
+    assert str(sample_product) == "Смартфон, 180000.0 руб. Остаток: 5 шт."
+
+
+def test_product_addition(sample_product):
+    product2 = Product("Телевизоры",
+                       "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
+                       123000.0, 7)
+    assert sample_product + product2 == 180000.0 * 5 + 123000.0 * 7
