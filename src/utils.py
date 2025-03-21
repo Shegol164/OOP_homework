@@ -8,21 +8,17 @@ from src.product import Product
 def load_data_from_json(filepath: str) -> List[Category]:
     """
     Загружает данные о категориях и товарах из JSON-файла.
+
     :param filepath: Путь к JSON-файлу.
     :return: Список объектов Category.
     """
-    with open(filepath, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    with open(filepath, "r", encoding="utf-8") as file:
+        data = json.load(file)
 
     categories = []
     for category_data in data:
         products = [
-            Product(
-                name=product_data["name"],
-                description=product_data["description"],
-                price=product_data["price"],
-                quantity=product_data["quantity"],
-            )
+            Product.new_product(product_data)
             for product_data in category_data["products"]
         ]
         category = Category(

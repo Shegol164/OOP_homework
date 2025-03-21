@@ -6,6 +6,7 @@
 ## Описание:
 Данный учебный проект содержит материалы заданий уроков:
 - 14.1 Введение в ООП
+- 14.2 Режимы доступа
 
 
 ## Установка:
@@ -19,15 +20,20 @@ https://github.com/Shegol164/OOP_homework.git
 from src.utils import load_data_from_json
 from src.category import Category
 Пример main:
-def main():
+def main() -> None:
+    # Загрузка данных из JSON
     categories = load_data_from_json(r"C:\Users\Pavel\PycharmProjects\oop_homework\data\products.json")
+
+    # Вывод информации о категориях и товарах
     for category in categories:
         print(f"Категория: {category.name}")
         print(f"Описание: {category.description}")
-        print(f"Количество товаров: {len(category.products)}")
-        for product in category.products:
-            print(f"  Товар: {product.name}, Цена: {product.price}, Количество: {product.quantity}")
+        print(f"Количество товаров: {len(category)}")
+        print("Товары:")
+        print(category.products)
         print()
+
+    # Вывод общей статистики
     print(f"Всего категорий: {Category.category_count}")
     print(f"Всего товаров: {Category.product_count}")
 
@@ -43,24 +49,41 @@ if __name__ == "__main__":
 Протестированы разные сценарий формата ввода и вывода 
 
 ## Например: test_category
--@pytest.fixture
+import pytest
+
+from src.category import Category
+from src.product import Product
+
+
+@pytest.fixture
 def sample_category():
     products = [
-        Product(name="Смартфоны",
-                description="Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
-                price=180000.0, quantity=5),
-        Product(name="Телевизоры",
-                description="Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
-                price=123000.0, quantity=7),
+        Product(
+            name="Смартфоны",
+            description="Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+            price=180000.0,
+            quantity=5,
+        ),
+        Product(
+            name="Телевизоры",
+            description="Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
+            price=123000.0,
+            quantity=7,
+        ),
     ]
-    return Category(name="Смартфоны",
-                    description="Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
-                    products=products)
+    return Category(
+        name="Смартфоны",
+        description="Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+        products=products,
+    )
 
 
 def test_category_initialization(sample_category):
     assert sample_category.name == "Смартфоны"
-    assert sample_category.description == "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни"
+    assert (
+            sample_category.description
+            == "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни"
+    )
     assert len(sample_category.products) == 2
 
 
@@ -70,3 +93,27 @@ def test_category_count(sample_category):
 
 def test_product_count(sample_category):
     assert Category.product_count >= len(sample_category.products)
+
+
+@pytest.fixture
+def sample_category():
+    return Category("Смартфоны",
+                    "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                    [])
+
+
+def test_add_product(sample_category):
+    p = Product("Смартфоны",
+                "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                210000.0, 8)
+    sample_category.add_product(p)
+    assert len(sample_category) == 1
+    assert Category.product_count == 1
+
+
+def test_products_getter(sample_category):
+    p = Product("Смартфоны",
+                "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                180000.0, 5)
+    sample_category.add_product(p)
+    assert "Смартфоны, 180000.0 руб. Остаток: 5 шт." in sample_category.products
