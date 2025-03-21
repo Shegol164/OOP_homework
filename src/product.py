@@ -2,11 +2,11 @@ class Product:
     """Класс для представления товара"""
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
+            self,
+            name: str,
+            description: str,
+            price: float,
+            quantity: int,
     ):
         """
         Инициализация товара.
@@ -20,6 +20,22 @@ class Product:
         self.description = description
         self.__price = price  # Приватный атрибут цены
         self.quantity = quantity
+
+    def __str__(self):
+        """Строковое представление продукта"""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """
+        Магический метод сложения.
+        Возвращает сумму произведений цены на количество для двух продуктов.
+        """
+        if not isinstance(other, Product):
+            raise TypeError("Можно складывать только объекты класса Product.")
+        return (self.price * self.quantity) + (other.price * other.quantity)
+
+    def __repr__(self):
+        return f"Product(name={self.name}, price={self.price}, quantity={self.quantity})"
 
     @classmethod
     def new_product(cls, product_data: dict, products: list = None):
@@ -58,8 +74,3 @@ class Product:
                 return
 
         self.__price = value
-
-    def __repr__(self):
-        return (
-            f"Product(name={self.name}, price={self.price}, quantity={self.quantity})"
-        )
