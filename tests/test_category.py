@@ -66,3 +66,21 @@ def test_products_getter(sample_category):
                 180000.0, 5)
     sample_category.add_product(p)
     assert "Смартфоны, 180000.0 руб. Остаток: 5 шт." in sample_category.products
+
+
+@pytest.fixture
+def sample_category():
+    return Category("Смартфоны",
+                    "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                    [])
+
+def test_category_str(sample_category):
+    p1 = Product("Смартфоны",
+                     "Смартфоны, как средство не только коммуникации, но и получение дополнительных функций для удобства жизни",
+                     180000.0, 5)
+    p2 = Product("Телевизоры",
+                     "Современный телевизор, который позволяет наслаждаться просмотром, станет вашим другом и помощником",
+                     123000.0, 7)
+    sample_category.add_product(p1)
+    sample_category.add_product(p2)
+    assert str(sample_category) == "Смартфоны, количество продуктов: 12 шт."
