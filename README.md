@@ -8,6 +8,7 @@
 - 14.1 Введение в ООП
 - 14.2 Режимы доступа
 - 15.1 Магические методы
+- 16.1 Наследование
 
 
 ## Установка:
@@ -20,7 +21,7 @@ https://github.com/Shegol164/OOP_homework.git
 Для запуска main использовать:
 from src.utils import load_data_from_json
 from src.category import Category
-Пример main:
+### main:
 def main() -> None:
     # Загрузка данных из JSON
     categories = load_data_from_json(
@@ -62,11 +63,134 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+### main 2:
+from src.product_2 import Product, Smartphone, LawnGrass
+from src.category_2 import Category
+
+def main() -> None:
+    # Создаем смартфоны
+    smartphone1 = Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый"
+    )
+    smartphone2 = Smartphone(
+        "Iphone 15",
+        "512GB, Gray space",
+        210000.0,
+        8,
+        98.2,
+        "15",
+        512,
+        "Gray space"
+    )
+    smartphone3 = Smartphone(
+        "Xiaomi Redmi Note 11",
+        "1024GB, Синий",
+        31000.0,
+        14,
+        90.3,
+        "Note 11",
+        1024,
+        "Синий"
+    )
+
+    # Выводим информацию о смартфонах
+    for smartphone in [smartphone1, smartphone2, smartphone3]:
+        print(f"Название: {smartphone.name}")
+        print(f"Описание: {smartphone.description}")
+        print(f"Цена: {smartphone.price} руб.")
+        print(f"Количество: {smartphone.quantity} шт.")
+        print(f"Производительность: {smartphone.efficiency}%")
+        print(f"Модель: {smartphone.model}")
+        print(f"Память: {smartphone.memory}GB")
+        print(f"Цвет: {smartphone.color}\n")
+
+    # Создаем газонную траву
+    grass1 = LawnGrass(
+        "Газонная трава",
+        "Элитная трава для газона",
+        500.0,
+        20,
+        "Россия",
+        "7 дней",
+        "Зеленый"
+    )
+    grass2 = LawnGrass(
+        "Газонная трава 2",
+        "Выносливая трава",
+        450.0,
+        15,
+        "США",
+        "5 дней",
+        "Темно-зеленый"
+    )
+
+    # Выводим информацию о газонной траве
+    for grass in [grass1, grass2]:
+        print(f"Название: {grass.name}")
+        print(f"Описание: {grass.description}")
+        print(f"Цена: {grass.price} руб.")
+        print(f"Количество: {grass.quantity} шт.")
+        print(f"Страна: {grass.country}")
+        print(f"Срок прорастания: {grass.germination_period}")
+        print(f"Цвет: {grass.color}\n")
+
+    # Демонстрация сложения товаров
+    smartphone_sum = smartphone1 + smartphone2
+    print(f"Общая стоимость смартфонов: {smartphone_sum} руб.")
+
+    grass_sum = grass1 + grass2
+    print(f"Общая стоимость газонной травы: {grass_sum} руб.")
+
+    # Попытка сложить разные типы товаров
+    try:
+        invalid_sum = smartphone1 + grass1
+    except TypeError as e:
+        print(f"Ошибка при сложении разных типов: {e}")
+
+    # Работа с категориями
+    category_smartphones = Category(
+        "Смартфоны",
+        "Высокотехнологичные смартфоны",
+        [smartphone1, smartphone2]
+    )
+    category_grass = Category(
+        "Газонная трава",
+        "Различные виды газонной травы",
+        [grass1, grass2]
+    )
+
+    # Добавление товара в категорию
+    category_smartphones.add_product(smartphone3)
+    print("\nТовары в категории 'Смартфоны':")
+    print(category_smartphones.products)
+
+    # Вывод общего количества продуктов
+    print(f"\nОбщее количество продуктов: {Product.product_count}")
+
+    # Попытка добавить не товар в категорию
+    try:
+        category_smartphones.add_product("Not a product")
+    except TypeError as e:
+        print(f"Ошибка при добавлении не товара: {e}")
+
+
+if __name__ == "__main__":
+    main()
+
 
 # Тесты
 Для всех функций написаны подробные тесты в папке tests:
 - test_category
 - test_product
+- test_category_2
+- test_product_2 
 
 
 Протестированы разные сценарий формата ввода и вывода 
@@ -159,3 +283,45 @@ def test_category_str(sample_category):
     sample_category.add_product(p2)
     assert str(sample_category) == "Смартфоны, количество продуктов: 12 шт."
 
+## Например: test_category_2
+
+import pytest
+from src.category_2 import Category
+from src.product_2 import Product, Smartphone, LawnGrass
+
+@pytest.fixture
+def sample_category():
+    return Category("Электроника", "Техника")
+
+@pytest.fixture
+def sample_products():
+    return [
+        Product("Телефон", "Смартфон", 10000, 5),
+        Smartphone("iPhone", "Флагман", 80000, 3, 95.5, "15 Pro", 256, "Black"),
+        LawnGrass("Газон", "Элитный", 500, 10, "Россия", "14 дней", "Зеленый")
+    ]
+
+def test_category_creation(sample_category):
+    assert sample_category.name == "Электроника"
+    assert sample_category.description == "Техника"
+    assert len(sample_category.products.split('\n')) == 0  # Пустая категория
+
+def test_add_product(sample_category, sample_products):
+    for product in sample_products:
+        sample_category.add_product(product)
+    assert len(sample_category.products.split('\n')) == 3
+
+def test_add_invalid_product(sample_category):
+    with pytest.raises(TypeError, match="Можно добавлять только объекты Product или его наследников"):
+        sample_category.add_product("Не товар")
+
+def test_category_str(sample_category, sample_products):
+    for product in sample_products[:2]:
+        sample_category.add_product(product)
+    assert "Электроника" in str(sample_category)
+    assert "количество продуктов: 2" in str(sample_category)
+
+def test_category_count(sample_category):
+    initial_count = Category.category_count
+    new_category = Category("Тест", "Тест")
+    assert Category.category_count == initial_count + 1
