@@ -15,18 +15,6 @@ class Product:
         Product.product_count += 1
 
     def __add__(self, other: 'Product') -> float:
-        """
-        Сложение товаров одного типа.
-
-        Args:
-            other: Другой товар для сложения
-
-        Returns:
-            Суммарная стоимость товаров (цена * количество)
-
-        Raises:
-            TypeError: Если типы товаров не совпадают
-        """
         if type(self) is not type(other):
             raise TypeError(f"Нельзя складывать {type(self).__name__} и {type(other).__name__}")
         return (self.price * self.quantity) + (other.price * other.quantity)
