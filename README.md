@@ -386,4 +386,4 @@ def test_smartphone_inheritance():
         256,
         "Серый")
     assert isinstance(s, Product)
-    assert isinstance(s, BaseProduct)
+    assert isinstance(s, BaseProduct) 
