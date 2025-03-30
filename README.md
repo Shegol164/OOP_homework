@@ -10,6 +10,7 @@
 - 15.1 Магические методы
 - 16.1 Наследование
 - 16.2 Множественное наследование
+- 17.1 Исключения
 
 
 ## Установка:
@@ -220,6 +221,39 @@ def main():
 
 if __name__ == "__main__":
     main()
+### main 4:
+from src.product_4 import Product
+from src.category_4 import Category
+
+
+def main() -> None:
+    """Основная функция для демонстрации работы классов."""
+    try:
+        # Попытка создать товар с нулевым количеством
+        product_invalid = Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+    except ValueError as e:
+        print(f"Ошибка: {e}")
+
+    try:
+        # Создание корректных товаров
+        product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+        product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+        product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+
+        # Создание категории с товарами
+        category1 = Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+        print(f"Средняя цена: {category1.middle_price():.2f} руб.")
+
+        # Создание пустой категории
+        category_empty = Category("Пустая категория", "Категория без продуктов")
+        print(f"Средняя цена пустой категории: {category_empty.middle_price():.2f} руб.")
+
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+
+if __name__ == '__main__':
+    main()
 
 # Тесты
 Для всех функций написаны подробные тесты в папке tests:
@@ -227,6 +261,8 @@ if __name__ == "__main__":
 - test_product
 - test_category_2
 - test_product_2 
+- test_product_3
+- test_product_4
 
 
 Протестированы разные сценарий формата ввода и вывода 
@@ -387,3 +423,26 @@ def test_smartphone_inheritance():
         "Серый")
     assert isinstance(s, Product)
     assert isinstance(s, BaseProduct) 
+
+## Например: test_category_4
+import pytest
+from src.product_4 import Product
+from src.category_4 import Category
+
+def test_product_zero_quantity() -> None:
+    """Проверяет вызов исключения при создании товара с нулевым количеством."""
+    with pytest.raises(ValueError) as excinfo:
+        Product("Бракованный", "Товар", 100.0, 0)
+    assert str(excinfo.value) == "Товар с нулевым количеством не может быть добавлен"
+
+def test_middle_price_with_products() -> None:
+    """Проверяет корректный расчет средней цены для категории с товарами."""
+    p1 = Product("Товар1", "Описание", 100.0, 2)
+    p2 = Product("Товар2", "Описание", 200.0, 3)
+    category = Category("Категория", "Описание", [p1, p2])
+    assert category.middle_price() == 150.0
+
+def test_middle_price_empty_category() -> None:
+    """Проверяет возврат нуля для пустой категории."""
+    category = Category("Пустая", "Категория")
+    assert category.middle_price() == 0.0
