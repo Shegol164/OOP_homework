@@ -1,0 +1,6 @@
+[run]
+source =
+    product_4.py
+    category_4.py
+omit =
+    tests/*
